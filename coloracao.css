@@ -1,0 +1,24 @@
+html{
+  background-color: #CCC;
+}
+body {
+   padding: 20px;
+   background-color: #FFF;
+   width: 710px;
+   min-height: 800px;
+   font-size: 12px;
+   font-family: Helvetica, Arial, sans-serif;
+   margin: auto;
+}
+td, th{
+   width: 1em;
+   border: 1px solid darkgray;
+   text-align: center;
+}
+section {
+   width: 350px;
+   height: 250px;
+   float: left;
+   display: block;
+}
+
