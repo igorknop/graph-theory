@@ -50,6 +50,7 @@ function montaMatrizAdjacencia(){
       console.dir(vetorCor);
       imprimeMatrizAdjacencia();
       imprimeVetorGrau();
+      coloreGrafo();
       imprimeVetorCor();
       desenhaGrafo();
    }
@@ -157,88 +158,27 @@ function desenhaGrafo(){
 }
 
 
-function coloreGrafo3(){
-   var g3verticesOrdenados = [];
-   for(var i=0; i<grafo.length; i++){
-      g3verticesOrdenados.push(i);
-   }
-   g3verticesOrdenados.sort(function(i,j){
-      return vgrau[i]-vgrau[j];
-   });
-   g3verticesOrdenados.reverse();
-   var g3cores = [];
-   for(var i = 0; i<grafo.length; i++){
-      g3cores[i] = [];
-   }
-   var g3cor = 0;
-   g3cores[g3cor].push(g3verticesOrdenados[0]);
-   var g3cor = 0;
-   var g3ci = 0;
-   for(var g3v=1; g3v<g3verticesOrdenados.length; g3v++){
-        var g3vertice = g3verticesOrdenados[g3v];
-        var achou = false;
-        do{
-         var g3verticeColorido = g3cores[g3cor][g3ci];
-         if(grafo[g3vertice][g3verticeColorido]){
-            g3cor++;
-            achou = true;
-         }
-        }while(g3verticeColorido);
-        if(!achou){
-         g3cores[g3cor].push(g3vertice);
-         vcor[g3vertice] = g3cor;
-        }
-   }
-}
-function coloreGrafo2(){
-   var g2verticesOrdenados = [];
-   for(var i=0; i<grafo.length; i++){
-      g2verticesOrdenados.push(i);
-   }
-   g2verticesOrdenados.sort(function(i,j){
-      return vgrau[i]-vgrau[j];
-   });
-   g2verticesOrdenados.reverse();
-   var g2cores = [];
-   for(var i = 0; i<grafo.length; i++){
-      g2cores[i] = [];
-   }
-   var g2cor = 0;
-   g2cores[g2cor].push(g2verticesOrdenados[0]);
-   for(var g2v=1; g2v<g2verticesOrdenados.length; g2v++){
-        for(var g2ci=0;g2ci<g2cores[g2cor].length; g2cor++){
-         if(grafo[g2verticesOrdenados[g2v]][g2cores[g2cor][g2ci]]){
-            g2cor++;
-         } else {
-            g2cores[g2cor].push(g2verticesOrdenados[g2v]);
-            vcor[g2verticesOrdenados[g2v]] = g2cor;
-            break;
-         }
-        }
-        g2cor = 0;
-   }
-}
 function coloreGrafo(){
         var c = 1;
         var lv = [0,1,2,3,4,5,6];
         lv.sort(function(i,j){
-           return vgrau[i]-vgrau[j];
+           return vetorGrau[i]-vetorGrau[j];
         });
         lv.reverse();
 
         var v = lv.pop();
-        //vcor[v] = c;
+        vetorCor[v] = c;
         //v = lv.pop();
         do{
-           if(vcor[v]==0){
-              vcor[v] = c;
-              for(j=0;j<grafo.length;j++){
+           if(vetorCor[v]==0){
+              vetorCor[v] = c;
+              for(j=0;j<matrizAdjacencia.length;j++){
                  if(j==v){
                     continue;
                  }
-                 if(grafo[v][j]==0){
-                       if(vcor[j]==0){
-                          vcor[j] = c;
+                 if(matrizAdjacencia[v][j]==0){
+                       if(vetorCor[j]==0){
+                          vetorCor[j] = c;
                        }
                  }
               }
