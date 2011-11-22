@@ -16,6 +16,7 @@ function init(){
 
 function updateGraph(){
    try{
+      document.getElementById("error").innerHTML="";
       montaMatrizAdjacencia();
    }catch(e){
       document.getElementById("error").innerHTML=e.toLocaleString();
