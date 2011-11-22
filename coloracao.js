@@ -40,20 +40,20 @@ function montaMatrizAdjacencia(){
       }
       for(var i=0; i<matrizAdjacencia.length;i++ ){
            if(vetorGrau[i]===undefined){ vetorGrau[i] = 0;}
-           vetorCor[i] = i;
+           vetorCor[i] = 0;
            for(var j=0; j<matrizAdjacencia.length;j++ ){
                  matrizAdjacencia[i][j] = matrizAdjacencia[i][j]?matrizAdjacencia[n1][n2]:0;
                   if(matrizAdjacencia[i][j]){ vetorGrau[i]++;}
            }
       }
 
-      console.dir(vetorCor);
       imprimeMatrizAdjacencia();
       imprimeVetorGrau();
-      coloreGrafo();
+      coloreGrafo2();
       imprimeVetorCor();
       desenhaGrafo();
    }
+
 function imprimeMatrizAdjacencia(){
         var adj = document.getElementById("adj");
         adj.innerHTML = "";
@@ -158,34 +158,39 @@ function desenhaGrafo(){
 }
 
 
-function coloreGrafo(){
-        var c = 1;
-        var lv = [0,1,2,3,4,5,6];
-        lv.sort(function(i,j){
+function coloreGrafo2(){
+        var numeroCromatico = 0;
+        var naoColoridos = [];
+        for(var i=0; i<vetorGrau.length; i++){
+         naoColoridos.push(i);
+        }
+        naoColoridos.sort(function(i,j){
            return vetorGrau[i]-vetorGrau[j];
         });
-        lv.reverse();
-
-        var v = lv.pop();
-        vetorCor[v] = c;
-        //v = lv.pop();
-        do{
-           if(vetorCor[v]==0){
-              vetorCor[v] = c;
-              for(j=0;j<matrizAdjacencia.length;j++){
-                 if(j==v){
-                    continue;
-                 }
-                 if(matrizAdjacencia[v][j]==0){
-                       if(vetorCor[j]==0){
-                          vetorCor[j] = c;
-                       }
-                 }
-              }
-              c = c+1;
-           }
-           v = lv.pop();
-        } while (v!==undefined);
+        var corAtual = 0;
+        while(naoColoridos.length>0){
+            var v = naoColoridos.pop();
+            vetorCor[v] = corAtual;
+            var mesmaCor = [];
+            mesmaCor.push(v);
+            for(var i=0; i<naoColoridos.length; i++){
+               var v1 = naoColoridos[i];
+               if(v1===undefined) continue;
+               var adj = false
+               for(var j=0;j<mesmaCor.length; j++){
+                  var v2 = mesmaCor[j];
+                  if(matrizAdjacencia[v1][v2]){
+                     adj = true;
+                  }
+               }
+               if(!adj){
+                  vetorCor[v1] = corAtual;
+                  mesmaCor.push(v1);
+                  delete naoColoridos[naoColoridos.indexOf(v1)];
+                  numeroCromatico++;
+               }
+            }
+            corAtual++;
+        }
+        document.getElementById("crom").innerText = numeroCromatico;
 }
-
-
