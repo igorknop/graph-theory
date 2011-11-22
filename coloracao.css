@@ -32,4 +32,10 @@ footer {
 	clear: both;
 	text-align: center;
 }
+#error{
+	color: red;
+	clear: both;
+	font-family: Arial, sans-serif; 
+	text-align: right;
+}
 

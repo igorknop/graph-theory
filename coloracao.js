@@ -9,14 +9,19 @@ function init(){
       if(event.preventDefault) event.preventDefault();
       event.result = false;
    });
-   document.getElementById("btnRun").addEventListener("click", montaMatrizAdjacencia );
+   document.getElementById("btnRun").addEventListener("click", updateGraph );
    
-   montaMatrizAdjacencia();
-   //montaTabelas();
-   //mostraCores();
-   //desenhaGrafo();
-   
+   updateGraph();
 }
+
+function updateGraph(){
+   try{
+      montaMatrizAdjacencia();
+   }catch(e){
+      document.getElementById("error").innerHTML=e.toLocaleString();
+   }
+}
+
 function montaMatrizAdjacencia(){
       if(event.preventDefault) event.preventDefault();
       event.result = false;
