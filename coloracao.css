@@ -16,9 +16,20 @@ td, th{
    text-align: center;
 }
 section {
-   width: 350px;
-   height: 250px;
    float: left;
    display: block;
+   padding-right:1em;
+}
+section#grafo {
+   width: 100%;
+   float: none;
+   clear: both;
+}
+#grafo canvas {
+}
+footer {
+	padding-top: 50px;
+	clear: both;
+	text-align: center;
 }
 
