@@ -54,7 +54,7 @@ function montaMatrizAdjacencia(){
 
       imprimeMatrizAdjacencia();
       imprimeVetorGrau();
-      coloreGrafo2();
+      coloreGrafo();
       imprimeVetorCor();
       desenhaGrafo();
    }
@@ -163,8 +163,7 @@ function desenhaGrafo(){
 }
 
 
-function coloreGrafo2(){
-        var numeroCromatico = 0;
+function coloreGrafo(){
         var naoColoridos = [];
         for(var i=0; i<vetorGrau.length; i++){
          naoColoridos.push(i);
@@ -192,10 +191,14 @@ function coloreGrafo2(){
                   vetorCor[v1] = corAtual;
                   mesmaCor.push(v1);
                   delete naoColoridos[naoColoridos.indexOf(v1)];
-                  numeroCromatico++;
                }
             }
             corAtual++;
         }
-        document.getElementById("crom").innerText = numeroCromatico;
+        var numeroCromatico = 0;
+        
+        for(var i=0; i<vetorCor.length; i++){
+         numeroCromatico = (numeroCromatico<vetorCor[i])?vetorCor[i]:numeroCromatico;
+        }
+        document.getElementById("crom").innerText = numeroCromatico+1;
 }
