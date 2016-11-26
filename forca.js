@@ -3,6 +3,8 @@ window.addEventListener("load", init);
 var matrizAdjacencia = [];
 var vetorGrau = [];
 var vetorCor = [];
+var massas = [];
+var previo = Date.now();
 
 function init(){
    document.getElementById("fadj").addEventListener("submit", function(){
@@ -45,7 +47,12 @@ function montaMatrizAdjacencia(){
          matrizAdjacencia[n2][n1] = 1;
       }
       for(var i=0; i<matrizAdjacencia.length;i++ ){
-           if(vetorGrau[i]===undefined){ vetorGrau[i] = 0;}
+        if(vetorGrau[i]===undefined){ vetorGrau[i] = 0;}
+        if(massas[i]===undefined){
+          massas[i] = new MassNode(i);
+          massas[i].x = 20*(i+1);
+          massas[i].y = 20*(i+1);
+        }
            vetorCor[i] = 0;
            for(var j=0; j<matrizAdjacencia.length;j++ ){
                  matrizAdjacencia[i][j] = matrizAdjacencia[i][j]?matrizAdjacencia[n1][n2]:0;
@@ -100,14 +107,38 @@ function imprimeVetorGrau(){
 
 
 function desenhaGrafo(){
+   requestAnimationFrame(desenhaGrafo);
+   var atual = Date.now();
+   dt = atual-previo;
+   console.log(dt)
    var canvas = document.getElementById("canvas");
    var ctx = canvas.getContext("2d");
    ctx.fillStyle = "rgb(255,255,255)";
    ctx.strokeStyle = "rgb(0,0,0)";
    ctx.save();
    ctx.fillRect(0, 0, canvas.width, canvas.height);
+   ctx.strokeText(Math.floor(1000/dt)+"fps", 20, 20);
+
+   for (var i = 0; i < massas.length; i++) {
+     massa = massas[i];
+     ctx.save();
+     ctx.translate(massa.x, massa.y);
+     ctx.translate(massa.r/2, 0);
+     ctx.beginPath();
+     ctx.arc(0, 0, massa.r, 0, 2*Math.PI, false);
+     ctx.lineWidth = 3;
+     ctx.fillStyle = "hsl("+(vetorCor[i]-1)*(360/matrizAdjacencia.length)+",100%,50%)";
+     ctx.fill();
+     ctx.stroke();
+     ctx.lineWidth = 1;
+     ctx.strokeText("N"+i+": "+vetorCor[i],-massa.r,massa.r+12);
+     ctx.restore();
+   }
+
+   /*
 
    var raio = 200;
+
    ctx.translate(canvas.width/2, canvas.height/2);
    var angulo = 2*Math.PI/matrizAdjacencia.length;
    var raioNo = (2*Math.PI*raio)/(10*matrizAdjacencia.length);
@@ -151,6 +182,8 @@ function desenhaGrafo(){
    }
    ctx.restore();
    ctx.restore();
+   */
+   previo = atual;
 }
 
 
@@ -186,5 +219,5 @@ function coloreGrafo(){
             }
             corAtual++;
         }
-        
+
 }
