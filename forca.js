@@ -5,6 +5,11 @@ var vetorGrau = [];
 var vetorCor = [];
 var massas = [];
 var previo = Date.now();
+var zoom = 1.5;
+var X = 0;
+var Y = 0;
+var canvas;
+var ctx;
 
 function init(){
    document.getElementById("fadj").addEventListener("submit", function(){
@@ -12,11 +17,41 @@ function init(){
       event.result = false;
    });
    document.getElementById("btnRun").addEventListener("click", updateGraph );
+   canvas = document.getElementById("canvas");
+   ctx = canvas.getContext("2d");
+   window.addEventListener("keydown",function (e) {
+     switch (e.keyCode) {
+       case 65:
+         X -= 5;
+         break;
+       case 87:
+         Y -= 5;
+         e.preventDefault();
+         break;
+       case 68:
+         X += 5;
+         break;
+       case 83:
+         Y += 5;
+         e.preventDefault();
+         break;
+       case 82:
+         zoom += 0.2;
+         break;
+       case 70:
+         zoom -= 0.2;
+         break;
+       default:
+
+     }
+   })
 
    updateGraph();
 }
 
 function updateGraph(){
+  if(event.preventDefault) event.preventDefault();
+  event.result = false;
    try{
       document.getElementById("error").innerHTML="";
       montaMatrizAdjacencia();
@@ -26,8 +61,7 @@ function updateGraph(){
 }
 
 function montaMatrizAdjacencia(){
-      if(event.preventDefault) event.preventDefault();
-      event.result = false;
+
       matrizAdjacencia = [];
       vetorGrau = [];
       vetorCor = [];
@@ -110,12 +144,14 @@ function desenhaGrafo(){
    requestAnimationFrame(desenhaGrafo);
    var atual = Date.now();
    dt = atual-previo;
-   var canvas = document.getElementById("canvas");
-   var ctx = canvas.getContext("2d");
+
+   ctx.clearRect(0, 0, canvas.width, canvas.height);
+   ctx.save();
+   ctx.scale(zoom, zoom);
+   ctx.translate(X,Y);
+
    ctx.fillStyle = "rgb(255,255,255)";
    ctx.strokeStyle = "rgb(0,0,0)";
-   ctx.save();
-   ctx.clearRect(0, 0, canvas.width, canvas.height);
    //ctx.strokeText(Math.floor(1000/dt)+"fps", 20, 20);
 
 
@@ -142,7 +178,6 @@ function desenhaGrafo(){
        if(matrizAdjacencia[i][j]){
          outra = massas[j];
          ctx.lineWidth = 1;
-         ctx.line
          ctx.beginPath();
          ctx.moveTo(massa.x, massa.y);
          ctx.lineTo(outra.x, outra.y);
@@ -167,6 +202,7 @@ function desenhaGrafo(){
      ctx.restore();
    }
    previo = atual;
+   ctx.restore();
 }
 
 
