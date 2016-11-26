@@ -50,8 +50,8 @@ function montaMatrizAdjacencia(){
         if(vetorGrau[i]===undefined){ vetorGrau[i] = 0;}
         if(massas[i]===undefined){
           massas[i] = new MassNode(i);
-          massas[i].x = 20*(i+1);
-          massas[i].y = 20*(i+1);
+          massas[i].x = 20*(i+1)+150*Math.random();
+          massas[i].y = 20*(i+1)+150*Math.random();
         }
            vetorCor[i] = 0;
            for(var j=0; j<matrizAdjacencia.length;j++ ){
@@ -110,20 +110,52 @@ function desenhaGrafo(){
    requestAnimationFrame(desenhaGrafo);
    var atual = Date.now();
    dt = atual-previo;
-   console.log(dt)
    var canvas = document.getElementById("canvas");
    var ctx = canvas.getContext("2d");
    ctx.fillStyle = "rgb(255,255,255)";
    ctx.strokeStyle = "rgb(0,0,0)";
    ctx.save();
-   ctx.fillRect(0, 0, canvas.width, canvas.height);
-   ctx.strokeText(Math.floor(1000/dt)+"fps", 20, 20);
+   ctx.clearRect(0, 0, canvas.width, canvas.height);
+   //ctx.strokeText(Math.floor(1000/dt)+"fps", 20, 20);
 
+
+   for (var i = 0; i < massas.length-1; i++) {
+     massa = massas[i];
+     for (var j = i+1; j < massas.length; j++) {
+       outra = massas[j];
+       massa.repel(outra,dt);
+     }
+   }
+   for(i=0;i<matrizAdjacencia.length;i++){
+     massa = massas[i];
+     for(j=0;j<matrizAdjacencia.length;j++){
+       if(matrizAdjacencia[i][j]){
+         outra = massas[j];
+         massa.attract(outra,dt);
+       }
+     }
+     massa.move(dt);
+   }
+   for(i=0;i<matrizAdjacencia.length;i++){
+     massa = massas[i];
+     for(j=0;j<matrizAdjacencia.length;j++){
+       if(matrizAdjacencia[i][j]){
+         outra = massas[j];
+         ctx.lineWidth = 1;
+         ctx.line
+         ctx.beginPath();
+         ctx.moveTo(massa.x, massa.y);
+         ctx.lineTo(outra.x, outra.y);
+         ctx.closePath();
+         ctx.stroke();
+
+       }
+     }
+   }
    for (var i = 0; i < massas.length; i++) {
      massa = massas[i];
      ctx.save();
      ctx.translate(massa.x, massa.y);
-     ctx.translate(massa.r/2, 0);
      ctx.beginPath();
      ctx.arc(0, 0, massa.r, 0, 2*Math.PI, false);
      ctx.lineWidth = 3;
@@ -134,55 +166,6 @@ function desenhaGrafo(){
      ctx.strokeText("N"+i+": "+vetorCor[i],-massa.r,massa.r+12);
      ctx.restore();
    }
-
-   /*
-
-   var raio = 200;
-
-   ctx.translate(canvas.width/2, canvas.height/2);
-   var angulo = 2*Math.PI/matrizAdjacencia.length;
-   var raioNo = (2*Math.PI*raio)/(10*matrizAdjacencia.length);
-
-   for(i=0;i<matrizAdjacencia.length;i++){
-      ctx.save();
-      for(j=i;j<matrizAdjacencia.length;j++){
-         if(matrizAdjacencia[i][j]){
-       ctx.save();
-       ctx.rotate(i*angulo);
-       ctx.translate(raio/2, 0);
-       ctx.beginPath();
-       ctx.moveTo(0, 0);
-       ctx.restore();
-       ctx.save();
-       ctx.rotate(j*angulo);
-       ctx.translate(raio/2,0);
-       ctx.lineTo(0, 0);
-       ctx.closePath();
-       ctx.stroke();
-       ctx.restore();
-         }
-      }
-      ctx.restore();
-   }
-
-   ctx.save();
-   for(i=0;i<matrizAdjacencia.length;i++){
-      ctx.save();
-      ctx.translate(raio/2, 0);
-      ctx.beginPath();
-      ctx.arc(0, 0, raioNo, 0, 2*Math.PI, false);
-      ctx.lineWidth = 3;
-      ctx.fillStyle = "hsl("+(vetorCor[i]-1)*(360/matrizAdjacencia.length)+",100%,50%)";
-      ctx.fill();
-      ctx.stroke();
-      ctx.lineWidth = 1;
-      ctx.strokeText("N"+i+": "+vetorCor[i],raioNo+5,3);
-      ctx.restore();
-      ctx.rotate(angulo);
-   }
-   ctx.restore();
-   ctx.restore();
-   */
    previo = atual;
 }
 

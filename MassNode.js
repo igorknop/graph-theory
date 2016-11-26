@@ -15,13 +15,28 @@ MassNode.prototype.move = function (dt) {
   this.vx += dt*this.ax;
   this.y += dt*this.vy;
   this.vy += dt*this.ay;
+  this.ax = 0;
+  this.ay = 0;
 };
 
-MassNode.prototype.G = 1.0;
+MassNode.prototype.K = 0.000001;
+MassNode.prototype.G = 0.3;
+MassNode.prototype.C = 0.00005;
 
 MassNode.prototype.repel = function (other) {
   dx = this.x - other.x;
   dy = this.y - other.y;
-  this.ax += -(this.G*this.m*other.m)/(dx*dx);
-  other.ax += -(this.G*this.m*other.m)/(dx*dx);
+  d = Math.sqrt(dx*dx+dy*dy);
+  f = (this.G*this.m*other.m)/(d*d);
+  this.ax  += +f*dx/d/this.m;
+  other.ax += -f*dx/d/other.m;
+  this.ay  += +f*dy/d/this.m;
+  other.ay += -f*dy/d/other.m;
+};
+
+MassNode.prototype.attract = function (other,dt) {
+  dx = this.x - other.x;
+  dy = this.y - other.y;
+  this.ax   += -this.K*dx -this.C*this.vx*dt;
+  this.ay   += -this.K*dy -this.C*this.vy*dt;
 };
