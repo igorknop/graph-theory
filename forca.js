@@ -5,7 +5,7 @@ var vetorGrau = [];
 var vetorCor = [];
 var massas = [];
 var previo = Date.now();
-var zoom = 1.5;
+var zoom = 1.0;
 var X = 0;
 var Y = 0;
 var canvas;
